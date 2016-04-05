@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <!-- base -->
+    <color name="main_blue">#1e7dfa</color>
+    <color name="main_blue_deep">#1b70e0</color>
+    <color name="main_blue_light">#82b6fa</color>
+    <color name="main_white">#ffffff</color>
+    <color name="main_black">#000000</color>
+
+    <color name="main_gray">#c1c4c7</color>
+
+
+    <color name="global_txt">@color/main_black</color>
+    <color name="global_txt_hint">#cccccc</color>
+    <color name="global_divider_gray">#d6d6d6</color>
+    <color name="global_divider_black">#a4a4a4</color>
+    <color name="global_color_bg">#e6ebf2</color>
+    <color name="global_item_bg_normal">@color/main_white</color>
+    <color name="global_item_bg_pressed">@color/global_divider_black</color>
+
+
+
+    <color name="button_red_pressed">#d00308</color>
+    <color name="button_red_normal">#e53539</color>
+    <color name="button_blue_pressed">#0b7ece</color>
+    <color name="button_blue_normal">#30a9fc</color>
+    <color name="button_white_normal">#ffffff</color>
+    <color name="button_white_pressed">#f5f5f7</color>
+
+
+
+    <!-- common -->
+    <color name="title_blue">@color/main_blue</color>
+
+
+</resources>

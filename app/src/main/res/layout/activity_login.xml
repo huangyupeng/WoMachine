@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/global_color_bg" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:visibility="invisible"
+        >
+        <com.example.peng.graduationproject.ui.view.RoundImageView
+            android:layout_width="@dimen/face_square"
+            android:layout_height="@dimen/face_square"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            />
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:background="@color/main_white"
+        android:paddingLeft="@dimen/option_item_padding"
+        android:paddingRight="@dimen/option_item_padding"
+        >
+    <EditText
+        android:id="@+id/log_name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:background="@color/main_white"
+        android:textSize="@dimen/font_main_big"
+        android:inputType="number"
+        android:hint="@string/username"
+        android:textColorHint="@color/global_txt_hint"
+        />
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:background="@color/main_white"
+        android:paddingLeft="@dimen/option_item_padding"
+        android:paddingRight="@dimen/option_item_padding"
+        >
+    <EditText
+        android:id="@+id/log_password"
+        android:layout_width="match_parent"
+        android:background="@color/main_white"
+        android:inputType="textPassword"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:textSize="@dimen/font_main_big"
+        android:hint="@string/password"
+        android:textColorHint="@color/global_txt_hint"
+        />
+    </LinearLayout>
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.9"
+        >
+        <Button
+            android:id="@+id/log_login"
+            android:layout_width="match_parent"
+            android:background="@drawable/selector_button_blue_corners"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:text="@string/signin"
+            android:layout_margin="@dimen/dimen_20"
+            />
+    </RelativeLayout>
+
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3.5"
+        android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                >
+                <TextView
+                    android:id="@+id/log_register"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/main_blue"
+                    android:text="@string/signupid"
+                    android:textSize="@dimen/font_main_normal"
+                    />
+
+                <TextView
+                    android:id="@+id/get_password"
+                    android:layout_gravity="center"
+                    android:textColor="@color/main_blue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/forgetpassword"
+                    android:textSize="@dimen/font_main_normal"
+                    android:layout_marginLeft="@dimen/dimen_20"
+                    />
+
+            </LinearLayout>
+        </RelativeLayout>
+
+</LinearLayout>
