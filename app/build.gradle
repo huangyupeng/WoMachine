@@ -20,11 +20,18 @@ android {
     useLibrary 'org.apache.http.legacy'
 }
 
+repositories{
+    flatDir{
+        dirs 'libs'
+    }
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.2.1'
     compile files('libs/MobCommons-2016.0303.1229.jar')
     compile files('libs/MobTools-2016.0303.1229.jar')
-    compile 'com.squareup.okhttp:okhttp:2.0.0'
+    compile name:'SMSSDK-2.0.2',ext:'aar'
+    compile name:'SMSSDKGUI-2.0.2',ext:'aar'
 }

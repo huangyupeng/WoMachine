@@ -7,12 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
-import android.app.Activity;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -21,13 +26,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.peng.graduationproject.common.NetManager;
 import com.example.peng.graduationproject.R;
 import com.example.peng.graduationproject.common.BaseActivity;
+
+import cn.smssdk.EventHandler;
+import cn.smssdk.SMSSDK;
 
 
 public class getPasswordActivity extends BaseActivity {   //重置密码的activity 用Mob的短信验证码验证
@@ -44,36 +51,40 @@ public class getPasswordActivity extends BaseActivity {   //重置密码的activ
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_getpassword);
-        SMSSDK.initSDK(this,"1119188c18b84", "8d7431c3a5e67a7ced10710309003f91"); //短信验证码的校验信息
-        Typeface face = Typeface.createFromAsset (getAssets() , "fonts/Arial.TTF" );
 
+        initView();
+        setDefaultValues();
+        bindEvents();
+
+    }
+
+    @Override
+    protected void initView() {
         get_edit=(EditText)findViewById(R.id.getpd_name);
         send=(Button)findViewById(R.id.get_send);
         getcode=(Button)findViewById(R.id.getpd_getcode);
         code=(EditText)findViewById(R.id.getpd_code);
         new_password=(EditText)findViewById(R.id.getpd_password);
-        get_edit.setTypeface(face);
-        code.setTypeface(face);
-        new_password.setTypeface(face);
         back=(TextView)findViewById(R.id.back);
-        back.setOnClickListener(onclick);
-        send.setOnClickListener(onclick);
-        getcode.setOnClickListener(onclick);
-        SMSSDK.registerEventHandler(eh);
-    }
 
-    @Override
-    protected void initView() {
+        setTitleText(R.string.getpassword);
 
     }
 
     @Override
     protected void setDefaultValues() {
 
+        SMSSDK.initSDK(this,"1119188c18b84", "8d7431c3a5e67a7ced10710309003f91");
+
     }
 
     @Override
     protected void bindEvents() {
+
+        back.setOnClickListener(onclick);
+        send.setOnClickListener(onclick);
+        getcode.setOnClickListener(onclick);
+        SMSSDK.registerEventHandler(eh);
 
     }
 
@@ -97,7 +108,7 @@ public class getPasswordActivity extends BaseActivity {   //重置密码的activ
                         Toast.makeText(getApplicationContext(), "密码位数要大于6位", Toast.LENGTH_SHORT).show();
                     else if((code.getText().toString().equals("")))
                         Toast.makeText(getApplicationContext(), "未输入验证码", Toast.LENGTH_SHORT).show();
-                    else if(Network.isNetworkConnected(getApplicationContext()))
+                    else if(NetManager.isConnect(getPasswordActivity.this))
                         SMSSDK.submitVerificationCode("86", get_edit.getText().toString(), code.getText().toString());
 
                     else Toast.makeText(getApplicationContext(), "网络未连接，请连接后重试", Toast.LENGTH_SHORT).show();
@@ -108,7 +119,7 @@ public class getPasswordActivity extends BaseActivity {   //重置密码的activ
                     System.out.println(get_edit.getText().toString());
                     if(get_edit.getText().toString().length()!=11)
                         Toast.makeText(getApplicationContext(), "手机号码位数不对哦", Toast.LENGTH_SHORT).show();
-                    else if(Network.isNetworkConnected(getApplicationContext()))
+                    else if(NetManager.isConnect(getPasswordActivity.this))
                     {SMSSDK.getVerificationCode("86",get_edit.getText().toString());}
                     else Toast.makeText(getApplicationContext(), "网络未连接，请连接后重试", Toast.LENGTH_SHORT).show();
 
@@ -129,7 +140,7 @@ public class getPasswordActivity extends BaseActivity {   //重置密码的activ
                 //回调完成
                 if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                     System.out.println(data);
-                    if(Network.isNetworkConnected(getApplicationContext()))
+                    if(NetManager.isConnect(getPasswordActivity.this))
                     {
                         if(t!=null&&t.isAlive())
                             t.destroy();

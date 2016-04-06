@@ -4,12 +4,16 @@ package com.example.peng.graduationproject.ui.global;
  * Created by cuinaitian on 2016/3/30 0030.
  */
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
 
-
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -38,24 +42,43 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.peng.graduationproject.R;
+import com.example.peng.graduationproject.common.BaseActivity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.smssdk.EventHandler;
+import cn.smssdk.SMSSDK;
 
 
-public class registerActivity extends Activity {   //注册activity
+public class registerActivity extends BaseActivity {   //注册activity
     private EditText register_number,register_code,register_name,register_password;
     private Button ask_code,register;
     private TextView back;
-    private String ip= IP.ip+"register";
     private TextView title;
     private	Thread t=null;
     private String type;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        SMSSDK.initSDK(this,"1119188c18b84", "8d7431c3a5e67a7ced10710309003f91");   //mob短信验证码的启动方法 需要验证用户信息 详情见mob官网的短信验证码模块
-        Typeface face = Typeface.createFromAsset (getAssets() , "fonts/Arial.TTF" );
+
+        initView();
+        setDefaultValues();
+        bindEvents();
+
+
+
 
         SMSSDK.registerEventHandler(eh); //注册短信回调
-        //SMSSDK.getSupportedCountries();
+
+
+
+
+    }
+
+    @Override
+    protected void initView() {
+
         register=(Button)findViewById(R.id.register_send);
         ask_code=(Button)findViewById(R.id.register_getcode);
         register_number=(EditText)findViewById(R.id.register_number);
@@ -64,11 +87,18 @@ public class registerActivity extends Activity {   //注册activity
         register_password=(EditText)findViewById(R.id.register_password);
         back=(TextView)findViewById(R.id.back);
 
+    }
 
-        register_number.setTypeface(face);
-        register_code.setTypeface(face);
-        register_name.setTypeface(face);
-        register_password.setTypeface(face);
+    @Override
+    protected void setDefaultValues() {
+
+        SMSSDK.initSDK(this, "1119188c18b84", "8d7431c3a5e67a7ced10710309003f91");   //mob短信验证码的启动方法 需要验证用户信息 详情见mob官网的短信验证码模块
+
+    }
+
+    @Override
+    protected void bindEvents() {
+
         back.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -81,6 +111,7 @@ public class registerActivity extends Activity {   //注册activity
                 registerActivity.this.finish();
             }
         });
+
         ask_code.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -110,7 +141,9 @@ public class registerActivity extends Activity {   //注册activity
             }
         });
         register.setOnClickListener(ok);
+
     }
+
     OnClickListener ok=new OnClickListener() {
 
         @Override
@@ -173,7 +206,7 @@ public class registerActivity extends Activity {   //注册activity
                     JSONObject jo=new JSONObject(msg.obj.toString());
                     if(jo.getString("code").equals("100"))
                     {
-                        SMSSDK.getVerificationCode("86",register_number.getText().toString());
+                        SMSSDK.getVerificationCode("86", register_number.getText().toString());
                     }
                     else {
                         Toast.makeText(getApplicationContext(), "手机号已经注册,请换一个", Toast.LENGTH_SHORT).show();
@@ -280,7 +313,7 @@ public class registerActivity extends Activity {   //注册activity
                     paramList.add(param);
                     param = new BasicNameValuePair("name", register_name.getText().toString());
                     paramList.add(param);
-                    post.setEntity(new UrlEncodedFormEntity(paramList,HTTP.UTF_8));
+                    post.setEntity(new UrlEncodedFormEntity(paramList, HTTP.UTF_8));
                     HttpResponse response=client.execute(post);
                     if(response.getStatusLine().getStatusCode() == 200){
                         //获取返回结果
