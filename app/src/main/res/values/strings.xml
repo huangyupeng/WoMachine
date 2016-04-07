@@ -24,4 +24,6 @@
     <string name="inputnewpassword">输入新密码</string>
     <string name="getpassword">找回密码</string>
 
+    <string name="signup">注册</string>
+
 </resources>

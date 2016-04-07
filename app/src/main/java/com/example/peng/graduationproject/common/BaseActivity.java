@@ -71,7 +71,7 @@ public abstract class BaseActivity extends FragmentActivity{
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                onActionBarBackClick();
             }
         });
 
@@ -146,6 +146,11 @@ public abstract class BaseActivity extends FragmentActivity{
         if (notitle){
             title_bar.setVisibility(View.GONE);
         }
+    }
+
+    //默认返回按钮执行动作
+    protected void onActionBarBackClick(){
+        finish();
     }
 
 
@@ -254,9 +259,5 @@ public abstract class BaseActivity extends FragmentActivity{
         }
 
         super.onDestroy();
-
     }
-
-
-
 }
