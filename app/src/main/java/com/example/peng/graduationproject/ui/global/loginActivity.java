@@ -56,8 +56,6 @@ public class loginActivity extends BaseActivity implements OnClickListener{
         bindEvents();
 
 
-
-
     }
 
     @Override
@@ -107,7 +105,7 @@ public class loginActivity extends BaseActivity implements OnClickListener{
 
 
                     try {
-                        HttpResponse httpResponse = NetManager.doPost(NetManager.URL, params);
+                        HttpResponse httpResponse = NetManager.doPost(NetManager.baseIP, params);
 
                         if(httpResponse.getStatusLine().getStatusCode() == 200){
                             String result = EntityUtils.toString(httpResponse.getEntity());

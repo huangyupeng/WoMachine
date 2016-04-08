@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -54,7 +55,7 @@ public class getPasswordActivity extends BaseActivity implements OnClickListener
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_getpassword);
+        setContentLayout(R.layout.activity_getpassword);
 
         initView();
         setDefaultValues();
@@ -143,66 +144,43 @@ public class getPasswordActivity extends BaseActivity implements OnClickListener
                     System.out.println(data);
                     if(NetManager.isConnect(getPasswordActivity.this))
                     {
-                        if(t!=null&&t.isAlive())
-                            t.destroy();
-                        t= new Thread(runnable);
-                        t.start();
+
                     }
                     else
                     {
-                        Message msg=new Message();
-                        msg.what=1;
-                        msg.obj="NOT_ONLINE";
-                        msg.setTarget(h);
-                        msg.sendToTarget();
+                        //网络连接失败
                     }
                     //提交验证码成功
                 }else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
-                    Message msg=new Message();
-                    msg.what=1;
-                    msg.obj="EVENT_GET_VERIFICATION_CODE";
-                    msg.setTarget(h);
-                    msg.sendToTarget();
-                    //获取验证码成功
-                }else if (event ==SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES){
-                    //返回支持发送验证码的国家列表
 
-            /*	ArrayList<HashMap<String,Object>> ob=(ArrayList<HashMap<String,Object>>)data;
-            	//System.out.println(ob.get(0).toString());
-            	System.out.println("收到列表");
-            	for(int i=0;i<ob.size();i++)
-            	{
-            		System.out.print(i+" ");
-            		HashMap<String, Object> hp=ob.get(i);
-            		System.out.println(hp.toString());
-            	}*/
+
+                    //获取验证码成功
                 }
             }else{
 
+                //失败
                 Throwable ta= (Throwable)data;
                 String ss= ta.getMessage();
-                System.out.println("ss="+ss);
                 try {
-                    JSONObject jo=new JSONObject(ss);
-                    if(jo.getInt("status")==520||jo.getInt("status")==468)
-                    {
-                        Message msg=new Message();
-                        msg.what=1;
-                        msg.obj="VERIFICATION_FALSE";
-                        msg.setTarget(h);
-                        msg.sendToTarget();
+                    JSONObject object=new JSONObject(ss);
+
+                    String des = object.optString("detail");//错误描述
+                    int status = object.optInt("status");//错误代码
+                    if (status > 0 && !TextUtils.isEmpty(des)) {
+                        showToast(des);
                     }
+
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-
 
                 ((Throwable)data).printStackTrace();
             }
         }
     };
 
+/*
     Handler h=new Handler()
     {
         public void handleMessage(Message msg) {
@@ -287,16 +265,11 @@ public class getPasswordActivity extends BaseActivity implements OnClickListener
                 e.printStackTrace();
             }
         }
-    };
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN){
-            SMSSDK.unregisterEventHandler(eh);
-            if(t!=null&&t.isAlive())
-                t.interrupt();
-            t=null;
-            getPasswordActivity.this.finish();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
+    };*/
+
+    @Override
+    protected void onDestroy(){
+        SMSSDK.unregisterAllEventHandler();
+        super.onDestroy();
     }
 }

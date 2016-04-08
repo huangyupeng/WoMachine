@@ -25,5 +25,6 @@
     <string name="getpassword">找回密码</string>
 
     <string name="signup">注册</string>
+    <string name="name">姓名</string>
 
 </resources>

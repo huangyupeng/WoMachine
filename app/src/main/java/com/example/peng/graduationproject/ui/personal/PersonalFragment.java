@@ -32,4 +32,14 @@ public class PersonalFragment extends BaseFragment{
     protected void initView(View view){
 
     }
+
+    @Override
+    protected void setDefaultValues() {
+
+    }
+
+    @Override
+    protected void bindEvents() {
+
+    }
 }

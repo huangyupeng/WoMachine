@@ -20,6 +20,7 @@ import org.apache.http.util.EntityUtils;
 
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,8 +31,12 @@ import java.util.Set;
  */
 public class NetManager {
     private static volatile HttpClient httpclient;
-    public final static String URL = "";
+    public final static String baseIP = "";
     private static Object monitor = new Object();
+
+
+    private static volatile HttpURLConnection httpURLConnection;
+
 
     public static HttpClient getClient() {
         synchronized (monitor) {

@@ -27,6 +27,8 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -43,6 +45,7 @@ import android.widget.Toast;
 
 import com.example.peng.graduationproject.R;
 import com.example.peng.graduationproject.common.BaseActivity;
+import com.example.peng.graduationproject.common.NetManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,26 +54,22 @@ import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 
 
-public class registerActivity extends BaseActivity {   //注册activity
+public class registerActivity extends BaseActivity implements OnClickListener{   //注册activity
     private EditText register_number,register_code,register_name,register_password;
-    private Button ask_code,register;
-    private TextView back;
-    private TextView title;
-    private	Thread t=null;
+    private Button register_getcode,register;
+
+
+    private long mCodeSendTime;
+    private final long CodeSendMinTime = 60000;
+
     private String type;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentLayout(R.layout.activity_register);
 
         initView();
         setDefaultValues();
         bindEvents();
-
-
-
-
-        SMSSDK.registerEventHandler(eh); //注册短信回调
-
 
 
 
@@ -80,88 +79,125 @@ public class registerActivity extends BaseActivity {   //注册activity
     protected void initView() {
 
         register=(Button)findViewById(R.id.register_send);
-        ask_code=(Button)findViewById(R.id.register_getcode);
+        register_getcode=(Button)findViewById(R.id.register_getcode);
         register_number=(EditText)findViewById(R.id.register_number);
         register_code=(EditText)findViewById(R.id.register_code);
         register_name=(EditText)findViewById(R.id.register_name);
         register_password=(EditText)findViewById(R.id.register_password);
-        back=(TextView)findViewById(R.id.back);
 
     }
 
     @Override
     protected void setDefaultValues() {
 
-        SMSSDK.initSDK(this, "1119188c18b84", "8d7431c3a5e67a7ced10710309003f91");   //mob短信验证码的启动方法 需要验证用户信息 详情见mob官网的短信验证码模块
-
+        SMSSDK.initSDK(this, "115c1798156e7", "4864103a3c76a4d061449910cce32041");//smssdk的app key和app secret
     }
 
     @Override
     protected void bindEvents() {
 
-        back.setOnClickListener(new OnClickListener() {
+        SMSSDK.registerEventHandler(eh); //注册短信回调
 
-            @Override
-            public void onClick(View arg0) {
-                // TODO Auto-generated method stub
-                SMSSDK.unregisterEventHandler(eh);
-                if(t!=null&&t.isAlive())
-                    t.interrupt();
-                t=null;
-                registerActivity.this.finish();
-            }
-        });
 
-        ask_code.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View arg0) {
-                // TODO Auto-generated method stub
-                System.out.println(register_number.getText().toString());
-                if(register_number.getText().toString().length()!=11)
-                    Toast.makeText(getApplicationContext(), "手机号码位数不对哦", Toast.LENGTH_SHORT).show();
-                else if(isNetworkConnected(getApplicationContext()))
-                {
-
-                   /* type="check";
-                    new Thread(runnable).start();*/
-                    try {
-                        JSONObject j=new JSONObject();
-                        j.put("code",100);
-                        Message msg=new Message();    //建个message包含服务器的反馈 发送给handler在handler里处理
-                        msg.setTarget(h);
-                        msg.what=2;
-                        msg.obj=j.toString();
-                        msg.sendToTarget();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-                else Toast.makeText(getApplicationContext(), "网络未连接，请连接后重试", Toast.LENGTH_SHORT).show();
-            }
-        });
-        register.setOnClickListener(ok);
+        register_getcode.setOnClickListener(this);
+        register.setOnClickListener(this);
 
     }
 
-    OnClickListener ok=new OnClickListener() {
+    @Override
+    public void onClick(View arg0) {
+
+        switch(arg0.getId()){
+            case R.id.register_send:
+
+                if(register_number.getText().toString().length()!=11)
+                    showToast("手机号码位数不对");
+                else if(register_password.getText().toString().length()<6)
+                    showToast("密码至少需要6位");
+                else if((register_code.getText().toString().equals("")))
+                    showToast("未输入验证码");
+                else if(NetManager.isConnect(registerActivity.this)) {
+                    SMSSDK.submitVerificationCode("86", register_number.getText().toString(), register_code.getText().toString());
+                }
+                else{
+                    showToast("网络未连接，请连接后重试");
+                }
+
+
+                break;
+            case R.id.register_getcode:
+                if (mCodeSendTime!=-1 && (SystemClock.uptimeMillis() - mCodeSendTime) < CodeSendMinTime){
+                    showToast("验证码已发送，60秒内请不要重复发送验证码");
+                }else if(register_number.getText().toString().length()!=11)
+                    showToast("手机号码位数不对");
+                else if(NetManager.isConnect(registerActivity.this)) {
+                    SMSSDK.getVerificationCode("86",register_number.getText().toString());
+                    mCodeSendTime = SystemClock.uptimeMillis();
+                }
+                else{
+                    showToast("网络未连接，请连接后重试");
+                }
+        }
+    }
+
+    @Override
+    protected void onDestroy(){
+        SMSSDK.unregisterAllEventHandler();
+        super.onDestroy();
+    }
+
+
+
+    EventHandler eh=new EventHandler(){
 
         @Override
-        public void onClick(View arg0) {
-            // TODO Auto-generated method stub
-            if(register_number.getText().toString().length()!=11)
-                Toast.makeText(getApplicationContext(), "手机号码位数不对哦", Toast.LENGTH_SHORT).show();
-            else if(register_password.getText().toString().length()<6)
-                Toast.makeText(getApplicationContext(), "密码位数要大于6位", Toast.LENGTH_SHORT).show();
-            else if(register_name.getText().toString().equals(""))
-                Toast.makeText(getApplicationContext(), "名字不能为空", Toast.LENGTH_SHORT).show();
+        public void afterEvent(int event, int result, Object data) {
 
-            else if(isNetworkConnected(getApplicationContext()))
-                SMSSDK.submitVerificationCode("86", register_number.getText().toString(), register_code.getText().toString());
+            if (result == SMSSDK.RESULT_COMPLETE) {
+                System.out.println(data);
 
-            else Toast.makeText(getApplicationContext(), "网络未连接，请连接后重试", Toast.LENGTH_SHORT).show();
+                //回调完成
+                if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
+                    System.out.println(data);
+                    if(NetManager.isConnect(registerActivity.this))
+                    {
+
+                    }
+                    else
+                    {
+                        //网络连接失败
+                    }
+                    //提交验证码成功
+                }else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
+
+
+                    //获取验证码成功
+                }
+            }else{
+
+                //失败
+                Throwable ta= (Throwable)data;
+                String ss= ta.getMessage();
+                try {
+                    JSONObject object=new JSONObject(ss);
+
+                    String des = object.optString("detail");//错误描述
+                    int status = object.optInt("status");//错误代码
+                    if (status > 0 && !TextUtils.isEmpty(des)) {
+                        showToast(des);
+                    }
+
+                } catch (JSONException e) {
+
+                    e.printStackTrace();
+                }
+
+                ((Throwable)data).printStackTrace();
+            }
         }
     };
+
+/*
      Handler h=new Handler()
     {
         public void handleMessage(Message msg) {
@@ -185,7 +221,7 @@ public class registerActivity extends BaseActivity {   //注册activity
                         Toast.makeText(getApplicationContext(), "服务器出问题了~ 你可以重试一下", Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
-                    // TODO Auto-generated catch block
+
                     e.printStackTrace();
                 }
 
@@ -212,7 +248,7 @@ public class registerActivity extends BaseActivity {   //注册activity
                         Toast.makeText(getApplicationContext(), "手机号已经注册,请换一个", Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
-                    // TODO Auto-generated catch block
+
                     e.printStackTrace();
                 }
 
@@ -220,85 +256,13 @@ public class registerActivity extends BaseActivity {   //注册activity
         }
 
     };
-    EventHandler eh=new EventHandler(){
-
-        @Override
-        public void afterEvent(int event, int result, Object data) {
-
-            if (result == SMSSDK.RESULT_COMPLETE) {
-                System.out.println(data);
-
-                //回调完成
-                if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
-                    System.out.println(data);
-                    if(isNetworkConnected(getApplicationContext()))
-                    {
-                        if(t!=null&&t.isAlive())
-                            t.destroy();
-                        type="register";
-                        System.out.println("registering~");
-                        t= new Thread(runnable);
-                        t.start();
-                    }
-                    else
-                    {
-                        Message msg=new Message();
-                        msg.what=1;
-                        msg.obj="NOT_ONLINE";
-                        msg.setTarget(h);
-                        msg.sendToTarget();
-                    }
-                    //提交验证码成功
-                }else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
-                    Message msg=new Message();
-                    msg.what=1;
-                    msg.obj="EVENT_GET_VERIFICATION_CODE";
-                    msg.setTarget(h);
-                    msg.sendToTarget();
-                    //获取验证码成功
-                }else if (event ==SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES){
-                    //返回支持发送验证码的国家列表
-
-                /*	ArrayList<HashMap<String,Object>> ob=(ArrayList<HashMap<String,Object>>)data;
-                	//System.out.println(ob.get(0).toString());
-                	System.out.println("收到列表");
-                	for(int i=0;i<ob.size();i++)
-                	{
-                		System.out.print(i+" ");
-                		HashMap<String, Object> hp=ob.get(i);
-                		System.out.println(hp.toString());
-                	}*/
-                }
-            }else{
-
-                Throwable ta= (Throwable)data;
-                String ss= ta.getMessage();
-                System.out.println("ss="+ss);
-                try {
-                    JSONObject jo=new JSONObject(ss);
-                    if(jo.getInt("status")==520||jo.getInt("status")==468)
-                    {
-                        Message msg=new Message();
-                        msg.what=1;
-                        msg.obj="VERIFICATION_FALSE";
-                        msg.setTarget(h);
-                        msg.sendToTarget();
-                    }
-                } catch (JSONException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
 
 
-                ((Throwable)data).printStackTrace();
-            }
-        }
-    };
     Runnable runnable=new Runnable() {
 
         @Override
         public void run() {
-            // TODO Auto-generated method stub
+
             try {
                 //File f=new File(path);
                 HttpClient client=new DefaultHttpClient();
@@ -357,35 +321,6 @@ public class registerActivity extends BaseActivity {   //注册activity
                 e.printStackTrace();
             }
         }
-    };
-    public boolean isNetworkConnected(Context context) {  //判断网络是否连接
-        if (context != null) {
-            ConnectivityManager mConnectivityManager = (ConnectivityManager) context
-                    .getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
-            if (mNetworkInfo != null) {
-                return mNetworkInfo.isAvailable();
-            }
-        }
-        return false;
-    }
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN){
-            SMSSDK.unregisterEventHandler(eh);
-            if(t!=null&&t.isAlive())
-                t.interrupt();
-            t=null;
-            registerActivity.this.finish();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-    protected void OnDestory()
-    {
+    };*/
 
-        if(t!=null&&t.isAlive())
-            t.interrupt();
-        t=null;
-        super.onDestroy();
-    }
 }
