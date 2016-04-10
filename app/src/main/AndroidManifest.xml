@@ -17,4 +17,20 @@
         </activity>
     </application>
 
+    <activity android:name=".ui.global.loginActivity">
+
+    </activity>
+
+    <activity android:name=".ui.global.registerActivity">
+
+    </activity>
+
+    <activity android:name=".ui.global.getPasswordActivity">
+
+    </activity>
+
+
+
+
+
 </manifest>

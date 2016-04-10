@@ -9,6 +9,8 @@
     <string name="advice">意见反馈</string>
     <string name="update">版本更新</string>
     <string name="about">关于我们</string>
+    <string name="farmlandinfo">耕地信息</string>
+    <string name="addfarmland">新增耕地</string>
 
 
     <!-- sign in and sign up -->
@@ -28,5 +30,7 @@
     <string name="name">姓名</string>
 
     <string name="copyright">copyright @2016-1026 Huangyupeng All Rights Reserved</string>
+
+    <string name="signout">退出登录</string>
 
 </resources>

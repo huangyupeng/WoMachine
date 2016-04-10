@@ -3,7 +3,9 @@ package com.example.peng.graduationproject.ui.global;
 /**
  * Created by cuinaitian on 2016/3/30 0030.
  */
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -44,6 +46,8 @@ public class getPasswordActivity extends BaseActivity implements OnClickListener
     //发送验证码最小时间间隔 60s
     private final long CodeSendMinTime = 60000;
 
+    private final static int EVENT_GETPASSWORD = 2;
+
     private EditText get_edit;
     private Button send;
     private Button getcode;
@@ -51,6 +55,8 @@ public class getPasswordActivity extends BaseActivity implements OnClickListener
     private EditText code;
 
     private long mCodeSendTime;
+
+    private HashMap<String,String> params;
 
 
     public void onCreate(Bundle savedInstanceState) {
@@ -113,16 +119,18 @@ public class getPasswordActivity extends BaseActivity implements OnClickListener
                         showToast("网络未连接，请连接后重试");
                     }
 
-
                     break;
                 case R.id.getpd_getcode:
-                    if (mCodeSendTime!=-1 && (SystemClock.uptimeMillis() - mCodeSendTime) < CodeSendMinTime){
+                    if (mCodeSendTime!=-1 && (SystemClock.elapsedRealtime() - mCodeSendTime) < CodeSendMinTime){
                         showToast("验证码已发送，60秒内请不要重复发送验证码");
                     }else if(get_edit.getText().toString().length()!=11)
                         showToast("手机号码位数不对");
                     else if(NetManager.isConnect(getPasswordActivity.this)) {
+
+                        //TODO consider the number is not register
+
                         SMSSDK.getVerificationCode("86",get_edit.getText().toString());
-                        mCodeSendTime = SystemClock.uptimeMillis();
+                        mCodeSendTime = SystemClock.elapsedRealtime();
                     }
                     else{
                         showToast("网络未连接，请连接后重试");
@@ -144,17 +152,40 @@ public class getPasswordActivity extends BaseActivity implements OnClickListener
                     System.out.println(data);
                     if(NetManager.isConnect(getPasswordActivity.this))
                     {
+                        params=new HashMap<String, String>();
+
+                        //TODO add params
+
+
+                        try {
+                            HttpResponse httpResponse = NetManager.doPost(NetManager.baseIP + NetManager.NET_INTERFACE_GETPASSWORD, params);
+
+                            if(httpResponse.getStatusLine().getStatusCode() == 200){
+                                String httpresult = EntityUtils.toString(httpResponse.getEntity());
+
+                                if(httpresult.equals(""))
+                                    System.out.println("反馈失败");
+
+                                getUiHanler().obtainMessage(EVENT_GETPASSWORD,httpresult);
+
+                                //TODO handle result
+
+
+                            }
+
+                        }catch (IOException e){
+                            e.printStackTrace();
+                        }
 
                     }
                     else
                     {
-                        //网络连接失败
+                        showToastOnUiThread("网络连接失败");
                     }
-                    //提交验证码成功
                 }else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
 
+                    showToastOnUiThread("验证码已发送至手机");
 
-                    //获取验证码成功
                 }
             }else{
 
@@ -171,7 +202,6 @@ public class getPasswordActivity extends BaseActivity implements OnClickListener
                     }
 
                 } catch (JSONException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
 
@@ -180,92 +210,19 @@ public class getPasswordActivity extends BaseActivity implements OnClickListener
         }
     };
 
-/*
-    Handler h=new Handler()
-    {
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if(msg.what==0)
-            {
-                System.out.println(msg.obj.toString());
-                JSONObject jo;
-                try {
-                    jo = new JSONObject(msg.obj.toString());
-                    String code=jo.get("code").toString();
-                    if(code.equals("200"))
-                    {
-                        Toast.makeText(getApplicationContext(), "密码更改失败", Toast.LENGTH_SHORT).show();
-                    }
-                    else if(code.equals("100")){
-                        Toast.makeText(getApplicationContext(), "密码更改成功", Toast.LENGTH_SHORT).show();
-                        getPasswordActivity.this.finish();
+    @Override
+    protected boolean uiHandlerCallback(Message msg) {
 
-                    }
-                    else {
-                        Toast.makeText(getApplicationContext(), "服务器出问题了~ 你可以重试一下", Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+        switch (msg.what){
+            case EVENT_GETPASSWORD:
 
-                //Toast.makeText(getApplicationContext(), "发送成功", Toast.LENGTH_SHORT).show();
-                //logRegisterActivity.this.finish();
-            }
-            else if(msg.what==1)
-            {
-                if(msg.obj.equals("EVENT_GET_VERIFICATION_CODE"))
-                    Toast.makeText(getApplicationContext(), "验证码已发送 有效期是两分钟,请稍等", Toast.LENGTH_SHORT).show();
-                else if(msg.obj.equals("VERIFICATION_FALSE"))
-                    Toast.makeText(getApplicationContext(), "验证码错误", Toast.LENGTH_SHORT).show();
-                else if(msg.obj.equals("ONT_ONLINE"))
-                    Toast.makeText(getApplicationContext(), "网络未连接", Toast.LENGTH_SHORT).show();
-            }
+                //TODO getpassword
+                break;
+            default:
+                break;
         }
-
-    };
-    Runnable runnable=new Runnable() {
-
-        @Override
-        public void run() {
-            // TODO Auto-generated method stub
-            try {
-                //File f=new File(path);
-                HttpClient client=new DefaultHttpClient();
-                HttpPost post=new HttpPost(ip);
-                //	JSONObject jo=new JSONObject();
-                List<NameValuePair> paramList = new ArrayList<NameValuePair>();
-                BasicNameValuePair param =new BasicNameValuePair("user_id", get_edit.getText().toString());
-                paramList.add(param);
-                param =new BasicNameValuePair("new_password", new_password.getText().toString());
-                paramList.add(param);
-
-                post.setEntity(new UrlEncodedFormEntity(paramList,"utf-8"));
-                HttpResponse response=client.execute(post);
-                if(response.getStatusLine().getStatusCode() == 200){
-                    //获取返回结果
-
-                    String result = EntityUtils.toString(response.getEntity()); //服务器返回的信息，转换成了String
-
-                    if(result.equals(""))
-                        System.out.println("反馈失败");
-                    System.out.println(result);
-                    String res=new String(result.getBytes(), "utf-8");
-                    System.out.println(res);
-                    Message msg=new Message();    //建个message包含服务器的反馈 发送给handler在handler里处理
-                    msg.setTarget(h);
-
-                    msg.what=0;
-                    msg.obj=result;
-                    msg.sendToTarget();
-
-
-                }
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-        }
-    };*/
+        return super.uiHandlerCallback(msg);
+    }
 
     @Override
     protected void onDestroy(){

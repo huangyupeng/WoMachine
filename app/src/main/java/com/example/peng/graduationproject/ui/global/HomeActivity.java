@@ -21,6 +21,8 @@ import java.util.ArrayList;
 
 public class HomeActivity extends BaseActivity {
 
+    public boolean sync_succeed = false;
+
     RadioGroup tabRg;
 
     ViewPager fragmentContaioner;
@@ -42,6 +44,8 @@ public class HomeActivity extends BaseActivity {
         initView();
         setDefaultValues();
         bindEvents();
+
+        sync_succeed = syncData();
     }
 
     @Override
@@ -153,4 +157,11 @@ public class HomeActivity extends BaseActivity {
 
 
     }
+
+
+    private boolean syncData(){
+
+        return true;
+    }
+
 }

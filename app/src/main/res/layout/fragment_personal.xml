@@ -5,6 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -21,6 +26,7 @@
                 android:layout_marginTop="@dimen/dimen_20"
                 />
     <LinearLayout
+        android:id="@+id/personal_info"
         android:layout_width="match_parent"
         android:layout_height="@dimen/setting_info_height"
         android:orientation="horizontal"
@@ -44,7 +50,7 @@
                 imagecontrol:border_thickness="1dp"
                 />
         </LinearLayout>
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -55,14 +61,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/font_main_large"
-                android:layout_alignParentLeft="true"
                 android:layout_marginLeft="@dimen/dimen_15"
                 android:layout_marginTop="@dimen/dimen_30"
                 android:text="name"
+                android:textColor="@color/global_txt"
 
                 />
 
-        </RelativeLayout>
+        </LinearLayout>
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -85,8 +91,52 @@
                 />
 
 
+            <View style="@style/line_h_black"
+                android:layout_marginTop="@dimen/dimen_20"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/options_item_height"
+                android:background="@drawable/selector_clickable_item_bg"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/farmlandinfo"
+                    android:textSize="@dimen/font_main_big"
+                    android:layout_marginLeft="@dimen/dimen_20"
+                    android:layout_gravity="center"
+                    android:textColor="@color/global_txt"
+                    />
+            </LinearLayout>
 
 
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@color/global_divider_gray"
+                android:headerDividersEnabled="true"
+                >
+
+            </ListView>
+
+            <View
+                style="@style/line_h_black"
+                />
+
+            <Button
+                android:id="@+id/add_farmland"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/options_item_height"
+                android:background="@drawable/selector_clickable_item_bg"
+                android:text="@string/addfarmland"
+                android:textSize="@dimen/font_main_big"
+
+                />
+
+            <View
+                style="@style/line_h_black"
+                />
 
 
             <View
@@ -94,6 +144,7 @@
                 android:layout_marginTop="@dimen/dimen_20"
                 />
             <RelativeLayout
+                android:id="@+id/advice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/selector_clickable_item_bg"
@@ -105,7 +156,7 @@
                     android:layout_alignParentLeft="true"
                     android:textColor="@color/global_txt"
                     android:layout_marginLeft="@dimen/dimen_20"
-                    android:textSize="@dimen/font_main_large"
+                    android:textSize="@dimen/font_main_big"
                     android:layout_centerVertical="true"
                     android:text="@string/advice"
                     />
@@ -125,9 +176,8 @@
                 android:layout_marginLeft="@dimen/option_item_padding"
                 />
 
-
-
             <RelativeLayout
+                android:id="@+id/update"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/selector_clickable_item_bg"
@@ -139,7 +189,7 @@
                     android:layout_alignParentLeft="true"
                     android:textColor="@color/global_txt"
                     android:layout_marginLeft="@dimen/dimen_20"
-                    android:textSize="@dimen/font_main_large"
+                    android:textSize="@dimen/font_main_big"
                     android:layout_centerVertical="true"
                     android:text="@string/update"
                     />
@@ -161,6 +211,7 @@
                 android:layout_marginLeft="@dimen/option_item_padding"/>
 
             <RelativeLayout
+                android:id="@+id/about"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/selector_clickable_item_bg"
@@ -172,7 +223,7 @@
                     android:layout_alignParentLeft="true"
                     android:textColor="@color/global_txt"
                     android:layout_marginLeft="@dimen/dimen_20"
-                    android:textSize="@dimen/font_main_large"
+                    android:textSize="@dimen/font_main_big"
                     android:layout_centerVertical="true"
                     android:text="@string/about"
                     />
@@ -191,11 +242,20 @@
             <View style="@style/line_h_black"/>
 
 
+            <Button
+                android:id="@+id/signout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_button_red_corners"
+                android:layout_margin="@dimen/dimen_20"
+                android:text="@string/signout"
+                />
 
 
 
         </LinearLayout>
 
     </ScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

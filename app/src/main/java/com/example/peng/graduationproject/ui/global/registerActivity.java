@@ -47,7 +47,9 @@ import com.example.peng.graduationproject.R;
 import com.example.peng.graduationproject.common.BaseActivity;
 import com.example.peng.graduationproject.common.NetManager;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import cn.smssdk.EventHandler;
@@ -55,12 +57,18 @@ import cn.smssdk.SMSSDK;
 
 
 public class registerActivity extends BaseActivity implements OnClickListener{   //注册activity
+
+    private static final int EVENT_REGISTER = 3;
+
+
     private EditText register_number,register_code,register_name,register_password;
     private Button register_getcode,register;
 
 
     private long mCodeSendTime;
     private final long CodeSendMinTime = 60000;
+
+    private HashMap<String,String> params;
 
     private String type;
     public void onCreate(Bundle savedInstanceState) {
@@ -131,6 +139,9 @@ public class registerActivity extends BaseActivity implements OnClickListener{  
                 }else if(register_number.getText().toString().length()!=11)
                     showToast("手机号码位数不对");
                 else if(NetManager.isConnect(registerActivity.this)) {
+
+                    //TODO consider the number is exist
+
                     SMSSDK.getVerificationCode("86",register_number.getText().toString());
                     mCodeSendTime = SystemClock.uptimeMillis();
                 }
@@ -146,7 +157,20 @@ public class registerActivity extends BaseActivity implements OnClickListener{  
         super.onDestroy();
     }
 
+    @Override
+    protected boolean uiHandlerCallback(Message msg) {
 
+        switch(msg.what){
+            case EVENT_REGISTER:
+
+                //TODO register
+                break;
+            default:
+                break;
+        }
+
+        return super.uiHandlerCallback(msg);
+    }
 
     EventHandler eh=new EventHandler(){
 
@@ -161,17 +185,41 @@ public class registerActivity extends BaseActivity implements OnClickListener{  
                     System.out.println(data);
                     if(NetManager.isConnect(registerActivity.this))
                     {
+                        //
+                        params=new HashMap<String, String>();
+
+                        //TODO add params
+
+
+                        try {
+                            HttpResponse httpResponse = NetManager.doPost(NetManager.baseIP + NetManager.NET_INTERFACE_GETPASSWORD, params);
+
+                            if(httpResponse.getStatusLine().getStatusCode() == 200){
+                                String httpresult = EntityUtils.toString(httpResponse.getEntity());
+
+                                if(httpresult.equals(""))
+                                    System.out.println("反馈失败");
+
+                                getUiHanler().obtainMessage(EVENT_REGISTER,httpresult);
+
+                                //TODO handle result
+
+
+                            }
+
+                        }catch (IOException e){
+                            e.printStackTrace();
+                        }
 
                     }
                     else
                     {
-                        //网络连接失败
+                        showToastOnUiThread("网络连接失败");
                     }
-                    //提交验证码成功
                 }else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
 
 
-                    //获取验证码成功
+                    showToastOnUiThread("验证码已发送至手机");
                 }
             }else{
 
@@ -196,131 +244,5 @@ public class registerActivity extends BaseActivity implements OnClickListener{  
             }
         }
     };
-
-/*
-     Handler h=new Handler()
-    {
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if(msg.what==0)
-            {
-                System.out.println(msg.obj.toString());
-                JSONObject jo;
-                try {
-                    jo = new JSONObject(msg.obj.toString());
-                    String code=jo.get("code").toString();
-                    if(code.equals("200"))
-                    {
-                        Toast.makeText(getApplicationContext(), "手机号码已经注册,请换一个", Toast.LENGTH_SHORT).show();
-                    }
-                    else if(code.equals("100")){
-                        Toast.makeText(getApplicationContext(), "注册成功!", Toast.LENGTH_SHORT).show();
-                        registerActivity.this.finish();
-                    }
-                    else {
-                        Toast.makeText(getApplicationContext(), "服务器出问题了~ 你可以重试一下", Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-
-                    e.printStackTrace();
-                }
-
-                //Toast.makeText(getApplicationContext(), "发送成功", Toast.LENGTH_SHORT).show();
-                //logRegisterActivity.this.finish();
-            }
-            else if(msg.what==1)
-            {
-                if(msg.obj.equals("EVENT_GET_VERIFICATION_CODE"))
-                    Toast.makeText(getApplicationContext(), "验证码已发送 有效期是两分钟,请稍等", Toast.LENGTH_SHORT).show();
-                else if(msg.obj.equals("VERIFICATION_FALSE"))
-                    Toast.makeText(getApplicationContext(), "验证码错误", Toast.LENGTH_SHORT).show();
-                else if(msg.obj.equals("ONT_ONLINE"))
-                    Toast.makeText(getApplicationContext(), "网络未连接，请连接后重试", Toast.LENGTH_SHORT).show();
-            }
-            else if(msg.what==2){
-                try {
-                    JSONObject jo=new JSONObject(msg.obj.toString());
-                    if(jo.getString("code").equals("100"))
-                    {
-                        SMSSDK.getVerificationCode("86", register_number.getText().toString());
-                    }
-                    else {
-                        Toast.makeText(getApplicationContext(), "手机号已经注册,请换一个", Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-
-                    e.printStackTrace();
-                }
-
-            }
-        }
-
-    };
-
-
-    Runnable runnable=new Runnable() {
-
-        @Override
-        public void run() {
-
-            try {
-                //File f=new File(path);
-                HttpClient client=new DefaultHttpClient();
-                HttpPost post=null;
-                List<NameValuePair> paramList = new ArrayList<NameValuePair>(); ;
-                if(type.equals("register"))
-                {
-                    post=new HttpPost(ip);
-                    BasicNameValuePair param =new BasicNameValuePair("phonenumber",register_number.getText().toString());
-                    paramList.add(param);
-                    param = new BasicNameValuePair("password",register_password.getText().toString());
-                    paramList.add(param);
-                    param = new BasicNameValuePair("name", register_name.getText().toString());
-                    paramList.add(param);
-                    post.setEntity(new UrlEncodedFormEntity(paramList, HTTP.UTF_8));
-                    HttpResponse response=client.execute(post);
-                    if(response.getStatusLine().getStatusCode() == 200){
-                        //获取返回结果
-                        System.out.println("in handler");
-                        String result = EntityUtils.toString(response.getEntity()); //服务器返回的信息，转换成了String
-
-                        if(result.equals(""))
-                            System.out.println("反馈失败");
-                        System.out.println(result);
-                        String res=new String(result.getBytes(), "utf-8");
-                        System.out.println(res);
-                        Message msg=new Message();    //建个message包含服务器的反馈 发送给handler在handler里处理
-                        msg.setTarget(h);
-                        msg.what=0;
-                        msg.obj=result;
-                        msg.sendToTarget();
-                    }
-                }
-                else if(type.equals("check")){
-                    HttpGet get=new HttpGet(IP.ip+"?phonenumber="+register_number.getText().toString());
-                    HttpResponse response=client.execute(get);
-                    if(response.getStatusLine().getStatusCode() == 200){
-                        //获取返回结果
-
-                        String result = EntityUtils.toString(response.getEntity()); //服务器返回的信息，转换成了String
-
-                        if(result.equals(""))
-                            System.out.println("反馈失败");
-                        System.out.println(result);
-                        String res=new String(result.getBytes(), "utf-8");
-                        System.out.println(res);
-                        Message msg=new Message();    //建个message包含服务器的反馈 发送给handler在handler里处理
-                        msg.setTarget(h);
-                        msg.what=2;
-                        msg.obj=result;
-                        msg.sendToTarget();
-                    }
-                }
-
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-        }
-    };*/
 
 }

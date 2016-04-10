@@ -31,7 +31,15 @@ import java.util.Set;
  */
 public class NetManager {
     private static volatile HttpClient httpclient;
+
+
     public final static String baseIP = "";
+
+    public final static String NET_INTERFACE_LOGIN = "";
+
+    public final static String NET_INTERFACE_GETPASSWORD = "";
+
+
     private static Object monitor = new Object();
 
 

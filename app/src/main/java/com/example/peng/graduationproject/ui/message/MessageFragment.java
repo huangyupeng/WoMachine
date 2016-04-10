@@ -33,4 +33,14 @@ public class MessageFragment extends BaseFragment{
 
     }
 
+    @Override
+    protected void setDefaultValues() {
+
+    }
+
+    @Override
+    protected void bindEvents() {
+
+    }
+
 }

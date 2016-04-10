@@ -15,10 +15,12 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -34,6 +36,12 @@ import com.example.peng.graduationproject.common.NetManager;
 
 public class loginActivity extends BaseActivity implements OnClickListener{
 
+    private static final int EVENT_LOGIN = 1;
+
+    private SharedPreferences mPref;
+
+    private String preUserId;
+    private String prePassword;
 
     private Button login;
     private TextView get_password;
@@ -70,6 +78,13 @@ public class loginActivity extends BaseActivity implements OnClickListener{
     @Override
     protected void setDefaultValues(){
 
+        mPref = PreferenceManager.getDefaultSharedPreferences(this);
+        preUserId = mPref.getString("userid", "");
+        prePassword = mPref.getString("userpassword", "");
+
+        log_name.setText(preUserId);
+        log_password.setText(prePassword);
+
     }
 
     @Override
@@ -101,11 +116,11 @@ public class loginActivity extends BaseActivity implements OnClickListener{
                 {
                     params=new HashMap<String, String>();
 
-                    //TODO login
+                    //TODO add login params
 
 
                     try {
-                        HttpResponse httpResponse = NetManager.doPost(NetManager.baseIP, params);
+                        HttpResponse httpResponse = NetManager.doPost(NetManager.baseIP + NetManager.NET_INTERFACE_LOGIN, params);
 
                         if(httpResponse.getStatusLine().getStatusCode() == 200){
                             String result = EntityUtils.toString(httpResponse.getEntity());
@@ -113,7 +128,9 @@ public class loginActivity extends BaseActivity implements OnClickListener{
                             if(result.equals(""))
                                 System.out.println("反馈失败");
 
-                            //TODO handle result
+                            getUiHanler().obtainMessage(EVENT_LOGIN,result);
+
+                            //TODO handle result   save name and id
 
 
                         }
@@ -132,9 +149,23 @@ public class loginActivity extends BaseActivity implements OnClickListener{
                 Intent i=new Intent(getApplicationContext(),getPasswordActivity.class);
                 startActivity(i);
                 break;
+        }
+    }
+
+
+    @Override
+    protected boolean uiHandlerCallback(Message msg) {
+
+        switch(msg.what){
+            case EVENT_LOGIN:
+                //TODO login callback
+
+                break;
+            default:
+                break;
 
         }
 
+        return super.uiHandlerCallback(msg);
     }
-
 }
