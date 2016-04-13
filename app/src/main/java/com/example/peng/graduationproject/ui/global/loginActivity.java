@@ -123,10 +123,7 @@ public class loginActivity extends BaseActivity implements OnClickListener{
                         HttpResponse httpResponse = NetManager.doPost(NetManager.baseIP + NetManager.NET_INTERFACE_LOGIN, params);
 
                         if(httpResponse.getStatusLine().getStatusCode() == 200){
-                            String result = EntityUtils.toString(httpResponse.getEntity());
 
-                            if(result.equals(""))
-                                System.out.println("反馈失败");
 
                             getUiHanler().obtainMessage(EVENT_LOGIN,result);
 

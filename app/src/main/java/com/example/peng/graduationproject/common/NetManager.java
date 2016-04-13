@@ -13,10 +13,12 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
 
 
 import java.io.IOException;
@@ -39,6 +41,8 @@ public class NetManager {
 
     public final static String NET_INTERFACE_GETPASSWORD = "";
 
+    public final static String ENCODING = "UTF-8";
+
 
     private static Object monitor = new Object();
 
@@ -60,6 +64,35 @@ public class NetManager {
         HttpGet httpGet = new HttpGet(url);
         return NetManager.getClient().execute(httpGet);
     }
+
+    public static JSONObject doPostJson(String url, JSONObject jsonObject) throws ClientProtocolException, IOException {
+        HttpPost httpPost = new HttpPost(url);
+
+        JSONObject response = null;
+
+        StringEntity stringEntity = new StringEntity(jsonObject.toString());
+        stringEntity.setContentEncoding(ENCODING);
+        stringEntity.setContentType("application/json");
+
+        httpPost.setEntity(stringEntity);
+
+        HttpResponse res = NetManager.getClient().execute(httpPost);
+
+        if(res.getStatusLine().getStatusCode() == 200){
+            String result = EntityUtils.toString(res.getEntity());
+
+            if(result.equals("")) {
+                System.out.println("反馈失败");
+            }
+
+
+        }else{
+
+        }
+    }
+
+
+
 
     public static HttpResponse doPost(String url,HashMap<String,String> paraMap) throws ClientProtocolException, IOException{
         HttpPost httpPost = new HttpPost(url);

@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".ui.global.HomeActivity">
+        <activity android:name=".ui.global.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -17,6 +17,8 @@
         </activity>
     </application>
 
+
+    <!-- global -->
     <activity android:name=".ui.global.loginActivity">
 
     </activity>
@@ -28,6 +30,35 @@
     <activity android:name=".ui.global.getPasswordActivity">
 
     </activity>
+
+    <activity android:name=".ui.global.HomeActivity">
+
+    </activity>
+
+    <!-- order -->
+
+    <!-- discover -->
+
+    <!-- message -->
+
+    <!-- personal -->
+
+    <activity android:name=".ui.personal.AboutActivity">
+
+    </activity>
+    <activity android:name=".ui.personal.AdviceActivity">
+
+    </activity>
+
+    <activity android:name=".ui.personal.FarmlandDetailActivity">
+
+    </activity>
+
+    <activity android:name=".ui.personal.FarmlandEditActivity">
+
+    </activity>
+
+
 
 
 

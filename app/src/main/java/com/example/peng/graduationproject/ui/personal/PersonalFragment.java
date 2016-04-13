@@ -112,6 +112,9 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 startActivity(intent);
                 break;
             case R.id.update:
+                if (showUpdateConfirmDialog()){
+                    showUpdateDownloadProgress();
+                }
 
                 break;
             case R.id.about:
@@ -127,4 +130,14 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
                 break;
         }
     }
+
+    private boolean showUpdateConfirmDialog(){
+        return false;
+    }
+
+    private boolean showUpdateDownloadProgress(){
+        return true;
+    }
+
+
 }
