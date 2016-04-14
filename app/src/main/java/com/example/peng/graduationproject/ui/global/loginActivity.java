@@ -50,7 +50,7 @@ public class loginActivity extends BaseActivity implements OnClickListener{
     private EditText log_name;
     private EditText log_password;
 
-    HashMap<String, String>params;
+    private JSONObject params;
 
 
 
@@ -114,27 +114,15 @@ public class loginActivity extends BaseActivity implements OnClickListener{
                 }
                 else
                 {
-                    params=new HashMap<String, String>();
-
-                    //TODO add login params
-
-
                     try {
-                        HttpResponse httpResponse = NetManager.doPost(NetManager.baseIP + NetManager.NET_INTERFACE_LOGIN, params);
+                        params = new JSONObject("");
+                        //TODO login
 
-                        if(httpResponse.getStatusLine().getStatusCode() == 200){
-
-
-                            getUiHanler().obtainMessage(EVENT_LOGIN,result);
-
-                            //TODO handle result   save name and id
-
-
-                        }
-
-                    }catch (IOException e){
+                    }catch(JSONException e){
                         e.printStackTrace();
                     }
+
+
                 }
                 break;
             case R.id.log_register:

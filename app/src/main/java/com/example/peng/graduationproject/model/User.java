@@ -5,10 +5,16 @@ package com.example.peng.graduationproject.model;
  */
 public class User {
 
+    //用户编号
+    private String number;
+
+    //用户手机号码
     private String id;
 
+    //用户姓名
     private String name;
 
+    //用户登录密码
     private String password;
 
     public String getId() {
@@ -33,5 +39,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 }

@@ -3,6 +3,7 @@ package com.example.peng.graduationproject.common;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -18,6 +19,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 
@@ -34,8 +36,7 @@ import java.util.Set;
 public class NetManager {
     private static volatile HttpClient httpclient;
 
-
-    public final static String baseIP = "";
+    public final static String baseIP = "nj.wentong.me:8080";
 
     public final static String NET_INTERFACE_LOGIN = "";
 
@@ -43,12 +44,9 @@ public class NetManager {
 
     public final static String ENCODING = "UTF-8";
 
-
     private static Object monitor = new Object();
 
-
     private static volatile HttpURLConnection httpURLConnection;
-
 
     public static HttpClient getClient() {
         synchronized (monitor) {
@@ -58,7 +56,6 @@ public class NetManager {
         }
         return httpclient;
     }
-
 
     public static HttpResponse doGet(String url) throws ClientProtocolException, IOException {
         HttpGet httpGet = new HttpGet(url);
@@ -80,16 +77,23 @@ public class NetManager {
 
         if(res.getStatusLine().getStatusCode() == 200){
             String result = EntityUtils.toString(res.getEntity());
-
             if(result.equals("")) {
-                System.out.println("反馈失败");
+                Log.e("myerror","http result 为空");
             }
-
-
+            try {
+                response = new JSONObject(result);
+            }catch(JSONException e){
+                e.printStackTrace();
+                Log.e("myerror","JSONException");
+            }
         }else{
-
+            Log.e("myerror","网络连接错误："+res.getStatusLine().getStatusCode());
         }
+
+        return response;
     }
+
+
 
 
 

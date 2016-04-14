@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.example.peng.graduationproject.R;
 import com.example.peng.graduationproject.common.BaseFragment;
 import com.example.peng.graduationproject.model.DatabaseHelper;
+import com.example.peng.graduationproject.model.User;
 import com.example.peng.graduationproject.model.UserInfoManager;
 import com.example.peng.graduationproject.ui.global.loginActivity;
 import com.example.peng.graduationproject.ui.view.RoundImageView;
@@ -70,11 +71,12 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     protected void setDefaultValues() {
-        if (UserInfoManager.getCurrentUser() == null){
+        User currentUser = UserInfoManager.getCurrentUser(getActivity());
+
+        if (currentUser == null){
             showToast("连接失败，请尝试重新登录");
-            return ;
         }else{
-            name.setText(UserInfoManager.getCurrentUser().getName());
+            name.setText(currentUser.getName());
         }
 
     }

@@ -22,7 +22,6 @@ public class CommonDialog extends Dialog{
 
     private TextView dialog_title;
     private TextView txt_tips;
-    private EditText editText;
     private TextView txt_cancel;
     private TextView txt_ok;
 
@@ -47,7 +46,6 @@ public class CommonDialog extends Dialog{
 
         dialog_title = (TextView)view.findViewById(R.id.dialog_title);
         txt_tips = (TextView)view.findViewById(R.id.txt_tips);
-        editText = (EditText)view.findViewById(R.id.edit_text);
         txt_cancel = (TextView)view.findViewById(R.id.txt_cancel);
         txt_ok = (TextView)view.findViewById(R.id.txt_ok);
 
@@ -104,15 +102,12 @@ public class CommonDialog extends Dialog{
         txt_cancel.setText(str);
     }
 
-    public String getEditText() {
-        return editText.getText().toString().trim();
-    }
-
     public void setDialogTitle(String title) {
         dialog_title.setText(title);
     }
 
-    public void setTextHint(String hint) {
-        editText.setHint(hint);
+    public void setTxt_tips(String tips){
+        txt_tips.setText(tips);
     }
+
 }
