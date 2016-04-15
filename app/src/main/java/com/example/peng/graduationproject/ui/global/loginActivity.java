@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -32,6 +33,7 @@ import android.widget.Toast;
 import com.example.peng.graduationproject.R;
 import com.example.peng.graduationproject.common.BaseActivity;
 import com.example.peng.graduationproject.common.NetManager;
+import com.example.peng.graduationproject.model.UserInfoManager;
 
 
 public class loginActivity extends BaseActivity implements OnClickListener{
@@ -40,19 +42,12 @@ public class loginActivity extends BaseActivity implements OnClickListener{
 
     private SharedPreferences mPref;
 
-    private String preUserId;
-    private String prePassword;
-
     private Button login;
     private TextView get_password;
     private TextView register;
 
     private EditText log_name;
     private EditText log_password;
-
-    private JSONObject params;
-
-
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,11 +74,9 @@ public class loginActivity extends BaseActivity implements OnClickListener{
     protected void setDefaultValues(){
 
         mPref = PreferenceManager.getDefaultSharedPreferences(this);
-        preUserId = mPref.getString("userid", "");
-        prePassword = mPref.getString("userpassword", "");
 
-        log_name.setText(preUserId);
-        log_password.setText(prePassword);
+        log_name.setText(mPref.getString("userid", ""));
+        log_password.setText(mPref.getString("userpassword", ""));
 
     }
 
@@ -100,11 +93,13 @@ public class loginActivity extends BaseActivity implements OnClickListener{
 
         switch(v.getId()){
             case R.id.log_login:
-                if(log_name.getText().toString().equals(""))
+                String mobile = log_name.getText().toString();
+                String password = log_password.getText().toString();
+                if(mobile.equals(""))
                 {
-                    showToast("用户名不能为空");
+                    showToast("手机号码不能为空");
                 }
-                else if(log_password.getText().toString().equals(""))
+                else if(password.equals(""))
                 {
                     showToast("密码不能为空");
                 }
@@ -115,42 +110,42 @@ public class loginActivity extends BaseActivity implements OnClickListener{
                 else
                 {
                     try {
-                        params = new JSONObject("");
-                        //TODO login
+                        JSONObject params = new JSONObject("");
+                        params.put("mobile",mobile);
+                        params.put("password",password);
+                        JSONObject res = NetManager.doPostJson(NetManager.NET_INTERFACE_LOGIN, params);
 
-                    }catch(JSONException e){
+                        if (res != null){
+
+                            NetManager.token = (String)res.get("data");
+                            UserInfoManager.setCurrentUser(mobile);
+
+                            Intent intent= new Intent(loginActivity.this, HomeActivity.class);
+                            startActivity(intent);
+
+                            SharedPreferences.Editor editor = mPref.edit();
+                            editor.putString("userid",mobile);
+                            editor.putString("password",password);
+                            editor.commit();
+                            finish();
+
+                        }else{
+                            Log.e("myerror","httpres = null");
+                        }
+
+                    }catch(Exception e){
                         e.printStackTrace();
                     }
-
-
                 }
                 break;
             case R.id.log_register:
-                Intent m=new Intent(getApplicationContext(),registerActivity.class);
+                Intent m=new Intent(loginActivity.this,registerActivity.class);
                 startActivity(m);
                 break;
             case R.id.get_password:
-
-                Intent i=new Intent(getApplicationContext(),getPasswordActivity.class);
+                Intent i=new Intent(loginActivity.this,getPasswordActivity.class);
                 startActivity(i);
                 break;
         }
-    }
-
-
-    @Override
-    protected boolean uiHandlerCallback(Message msg) {
-
-        switch(msg.what){
-            case EVENT_LOGIN:
-                //TODO login callback
-
-                break;
-            default:
-                break;
-
-        }
-
-        return super.uiHandlerCallback(msg);
     }
 }

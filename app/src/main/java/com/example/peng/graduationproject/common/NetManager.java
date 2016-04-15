@@ -44,6 +44,8 @@ public class NetManager {
 
     public final static String ENCODING = "UTF-8";
 
+    public static String token = "";
+
     private static Object monitor = new Object();
 
     private static volatile HttpURLConnection httpURLConnection;
@@ -72,6 +74,10 @@ public class NetManager {
         stringEntity.setContentType("application/json");
 
         httpPost.setEntity(stringEntity);
+
+        if (!token.equals("")){
+            httpPost.addHeader("token",token);
+        }
 
         HttpResponse res = NetManager.getClient().execute(httpPost);
 

@@ -9,6 +9,7 @@ import android.widget.ListView;
 
 import com.example.peng.graduationproject.R;
 import com.example.peng.graduationproject.common.BaseFragment;
+import com.example.peng.graduationproject.ui.adapter.OrderListAdapter;
 
 /**
  * Created by peng on 2016/4/2.
@@ -17,6 +18,8 @@ public class OrderFragment extends BaseFragment{
 
     private SwipeRefreshLayout swipe_ly;
     private ListView order_list;
+
+    private OrderListAdapter adapter;
 
 
     @Override
@@ -37,6 +40,12 @@ public class OrderFragment extends BaseFragment{
     @Override
     protected void initView(View view){
 
+        swipe_ly = (SwipeRefreshLayout)view.findViewById(R.id.swipe_ly);
+        order_list = (ListView)view.findViewById(R.id.order_list);
+
+        adapter = new OrderListAdapter();
+        order_list.setAdapter(adapter);
+
     }
 
     @Override
@@ -47,7 +56,13 @@ public class OrderFragment extends BaseFragment{
     @Override
     protected void bindEvents() {
 
+
+        swipe_ly.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+            }
+        });
+
     }
-
-
 }
