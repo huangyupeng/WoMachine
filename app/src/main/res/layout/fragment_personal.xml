@@ -94,7 +94,8 @@
             <View style="@style/line_h_black"
                 android:layout_marginTop="@dimen/dimen_20"
                 />
-            <LinearLayout
+            <RelativeLayout
+                android:id="@+id/farmland_info"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/options_item_height"
                 android:background="@drawable/selector_clickable_item_bg"
@@ -107,36 +108,26 @@
                     android:layout_marginLeft="@dimen/dimen_20"
                     android:layout_gravity="center"
                     android:textColor="@color/global_txt"
+                    android:layout_centerVertical="true"
                     />
-            </LinearLayout>
 
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/right_arrow"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/option_item_padding"
+                    android:layout_marginTop="@dimen/dimen_15"
+                    android:layout_marginBottom="@dimen/dimen_15"
+                    />
+            </RelativeLayout>
 
-            <ListView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:divider="@color/global_divider_gray"
-                android:headerDividersEnabled="true"
-                >
-
-            </ListView>
 
             <View
                 style="@style/line_h_black"
                 />
 
-            <Button
-                android:id="@+id/add_farmland"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/options_item_height"
-                android:background="@drawable/selector_clickable_item_bg"
-                android:text="@string/addfarmland"
-                android:textSize="@dimen/font_main_big"
-
-                />
-
-            <View
-                style="@style/line_h_black"
-                />
 
 
             <View

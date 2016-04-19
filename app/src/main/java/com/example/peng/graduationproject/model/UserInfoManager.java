@@ -34,4 +34,5 @@ public class UserInfoManager {
         }
         return currentUser;
     }
+
 }

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_white"
+    >
+
+    <TextView
+        android:id="@+id/commitdate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/main_gray"
+        android:gravity="left"
+        android:paddingLeft="@dimen/option_item_padding"
+        android:paddingTop="@dimen/dimen_5"
+        android:paddingBottom="@dimen/dimen_5"
+        android:text="2016-4-19"
+        android:textSize="@dimen/font_main_small"
+        />
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginTop="@dimen/dimen_10">
+    <TextView
+        android:id="@+id/farmname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="farmname"
+        android:textSize="@dimen/font_main_big"
+        android:layout_marginLeft="@dimen/option_item_padding"
+        />
+
+    <TextView
+        android:id="@+id/order_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="进行中"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/option_item_padding"
+        android:textSize="@dimen/font_main_normal"
+
+        />
+</RelativeLayout>
+    <TextView
+        android:id="@+id/farm_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="farm address"
+        android:layout_marginLeft="@dimen/option_item_padding"
+        android:layout_marginTop="@dimen/dimen_5"
+        android:textSize="@dimen/font_main_small"
+        />
+    <RelativeLayout
+        android:id="@+id/started"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/dimen_10"
+        >
+        <TextView
+            android:id="@+id/start_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/option_item_padding"
+            android:text="2016-5-5"
+            android:textSize="@dimen/font_main_normal"
+            />
+
+        <TextView
+            android:id="@+id/end_time"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2016-6-6"
+            android:layout_marginRight="@dimen/option_item_padding"
+            android:textSize="@dimen/font_main_normal"
+            />
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>

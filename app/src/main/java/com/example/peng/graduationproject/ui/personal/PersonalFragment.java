@@ -31,7 +31,8 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     private RoundImageView face;
     private TextView name;
     private LinearLayout personal_info;
-    private Button add_farmland;
+
+    private RelativeLayout farmland_info;
 
     private RelativeLayout advice;
     private RelativeLayout update;
@@ -60,7 +61,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         face =(RoundImageView)view.findViewById(R.id.face);
         name = (TextView)view.findViewById(R.id.name);
         personal_info = (LinearLayout)view.findViewById(R.id.personal_info);
-        add_farmland = (Button)view.findViewById(R.id.add_farmland);
+        farmland_info = (RelativeLayout)view.findViewById(R.id.farmland_info);
         advice = (RelativeLayout)view.findViewById(R.id.advice);
         update = (RelativeLayout)view.findViewById(R.id.update);
         about = (RelativeLayout)view.findViewById(R.id.about);
@@ -84,7 +85,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     @Override
     protected void bindEvents() {
 
-        add_farmland.setOnClickListener(this);
+        farmland_info.setOnClickListener(this);
         advice.setOnClickListener(this);
         update.setOnClickListener(this);
         about.setOnClickListener(this);
@@ -105,8 +106,8 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
         switch(v.getId()){
 
 
-            case R.id.add_farmland:
-                intent = new Intent(getActivity(), FarmlandEditActivity.class);
+            case R.id.farmland_info:
+                intent = new Intent(getActivity(), FarmlandListActivity.class);
                 startActivity(intent);
                 break;
             case R.id.advice:
