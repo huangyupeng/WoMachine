@@ -1,11 +1,13 @@
 package com.example.peng.graduationproject.ui.order;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.peng.graduationproject.R;
@@ -37,8 +39,6 @@ public class OrderFragment extends BaseFragment{
         initView(view);
         setDefaultValues();
         bindEvents();
-
-        getProcHandler().obtainMessage(EVENT_REFRESH);
         return view;
     }
 
@@ -70,6 +70,19 @@ public class OrderFragment extends BaseFragment{
             }
         });
 
+        order_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0){
+                    Intent intent = new Intent(getActivity(), OrderAddActivity.class);
+                    startActivity(intent);
+                }else{
+                    Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+
     }
 
     @Override
@@ -78,7 +91,9 @@ public class OrderFragment extends BaseFragment{
         switch (msg.what){
             case EVENT_REFRESH:
                 //TODO get data from server
-                //TODO write to database
+
+
+                //TODO write to database  // is this neccessary?
                 break;
         }
 
