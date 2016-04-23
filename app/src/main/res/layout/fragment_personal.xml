@@ -93,12 +93,14 @@
 
             <View style="@style/line_h_black"
                 android:layout_marginTop="@dimen/dimen_20"
+                android:visibility="gone"
                 />
             <RelativeLayout
                 android:id="@+id/farmland_info"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/options_item_height"
                 android:background="@drawable/selector_clickable_item_bg"
+                android:visibility="gone"
                 >
                 <TextView
                     android:layout_width="wrap_content"
@@ -122,10 +124,9 @@
                     android:layout_marginBottom="@dimen/dimen_15"
                     />
             </RelativeLayout>
-
-
             <View
                 style="@style/line_h_black"
+                android:visibility="gone"
                 />
 
 

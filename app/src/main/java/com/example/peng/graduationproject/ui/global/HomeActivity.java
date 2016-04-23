@@ -76,6 +76,7 @@ public class HomeActivity extends BaseActivity {
         currentIndex = 0;
         tabRg.check(R.id.tab_order);
         setTitleText(R.string.order);
+        getBtn_add().setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -91,21 +92,25 @@ public class HomeActivity extends BaseActivity {
                         fragmentContaioner.setCurrentItem(0);
                         setTitleText(R.string.order);
                         currentIndex=0;
+                        getBtn_add().setVisibility(View.VISIBLE);
                         break;
                     case R.id.tab_discover:
                         fragmentContaioner.setCurrentItem(1);
                         setTitleText(R.string.discover);
                         currentIndex=1;
+                        getBtn_add().setVisibility(View.INVISIBLE);
                         break;
                     case R.id.tab_message:
                         fragmentContaioner.setCurrentItem(2);
                         setTitleText(R.string.message);
                         currentIndex=2;
+                        getBtn_add().setVisibility(View.INVISIBLE);
                         break;
                     case R.id.tab_setting:
                         fragmentContaioner.setCurrentItem(3);
                         setTitleText(R.string.setting);
                         currentIndex=3;
+                        getBtn_add().setVisibility(View.INVISIBLE);
                         break;
                     default:
                         break;
@@ -128,21 +133,25 @@ public class HomeActivity extends BaseActivity {
                         tabRg.check(R.id.tab_order);
                         currentIndex = 0;
                         setTitleText(R.string.order);
+                        getBtn_add().setVisibility(View.VISIBLE);
                         break;
                     case 1:
                         tabRg.check(R.id.tab_discover);
                         currentIndex = 1;
                         setTitleText(R.string.discover);
+                        getBtn_add().setVisibility(View.INVISIBLE);
                         break;
                     case 2:
                         tabRg.check(R.id.tab_message);
                         currentIndex = 2;
                         setTitleText(R.string.message);
+                        getBtn_add().setVisibility(View.INVISIBLE);
                         break;
                     case 3:
                         tabRg.check(R.id.tab_setting);
                         currentIndex = 3;
                         setTitleText(R.string.setting);
+                        getBtn_add().setVisibility(View.INVISIBLE);
                         break;
                     default:
                         break;

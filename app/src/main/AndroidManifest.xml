@@ -8,6 +8,11 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="12a27e8e0c7227a0c7043651c0857dee"
+            />
+
         <activity android:name=".ui.global.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -15,7 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
+
 
 
     <!-- global -->
@@ -31,17 +36,36 @@
 
     </activity>
 
-    <activity android:name=".ui.global.HomeActivity">
+    <activity android:name="com.example.peng.graduationproject.ui.global.HomeActivity">
 
     </activity>
 
-    <!-- order -->
+
+        <activity android:name=".ui.dialog.ListOptionsActivity">
+
+        </activity>
+
+    <!-- order
+    <activity android:name=".ui.order.OrderDetailActivity">
+
+    </activity>-->
+
+    <activity android:name=".ui.order.OrderAddActivity"
+        android:windowSoftInputMode="stateHidden|stateUnchanged"
+        >
+
+    </activity>
+
+    <activity android:name="com.example.peng.graduationproject.ui.order.SelectAdressActivity">
+
+    </activity>
+
 
     <!-- discover -->
 
     <!-- message -->
 
-    <!-- personal -->
+    <!-- personal
 
     <activity android:name=".ui.personal.AboutActivity">
 
@@ -56,12 +80,26 @@
 
     <activity android:name=".ui.personal.FarmlandEditActivity">
 
-    </activity>
+    </activity>-->
 
+    </application>
 
+    <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
 </manifest>

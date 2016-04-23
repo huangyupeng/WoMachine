@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_white">
+
+    <TextView
+        android:id="@+id/dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dimen_15"
+        android:text="选择耕地类型"
+
+        android:textColor="@color/main_blue"
+        android:textSize="@dimen/font_main_large" />
+
+    <View style="@style/line_h_black"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_clickable_item_bg"
+        android:gravity="center"
+        android:textSize="@dimen/font_main_normal"
+        android:text="shuitian"
+        />
+
+    <View
+        style="@style/line_h_black"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_clickable_item_bg"
+        android:gravity="center"
+        android:textSize="@dimen/font_main_normal"
+        android:text="shuitian"
+        />
+    <View
+        style="@style/line_h_black"/>
+
+</LinearLayout>

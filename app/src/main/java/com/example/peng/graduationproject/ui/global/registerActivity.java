@@ -75,6 +75,9 @@ public class registerActivity extends BaseActivity implements OnClickListener{  
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.activity_register);
 
+        setTitleText("注册账号");
+        getBtn_back().setVisibility(View.VISIBLE);
+
         initView();
         setDefaultValues();
         bindEvents();
@@ -200,7 +203,8 @@ public class registerActivity extends BaseActivity implements OnClickListener{  
                                 if(httpresult.equals(""))
                                     System.out.println("反馈失败");
 
-                                getUiHanler().obtainMessage(EVENT_REGISTER,httpresult);
+                                Message msg = getUiHanler().obtainMessage(EVENT_REGISTER,httpresult);
+                                getUiHanler().sendMessage(msg);
 
                                 //TODO handle result
 

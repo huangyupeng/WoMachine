@@ -30,28 +30,19 @@ public class OrderListAdapter extends BaseAdapter{
 
     private ArrayList<Order> list = new ArrayList<Order>();
 
-    public OrderListAdapter(Context context) {
+    public OrderListAdapter(Context context,ArrayList<Order> list) {
         this.context = context;
-    }
-
-    @Override
-    public int getViewTypeCount() {
-        return ITEM_VIEW_COUNT;
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return position == 0?ITEM_TYPE_ADD:ITEM_TYPE_NORMAL;
+        this.list = list;
     }
 
     @Override
     public int getCount() {
-        return list.size()+1;
+        return list.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return position == 0? null: list.get(position-1);
+        return list.get(position);
     }
 
     @Override
@@ -62,11 +53,6 @@ public class OrderListAdapter extends BaseAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        if (getItemViewType(position) == ITEM_TYPE_ADD){                               //备注：多type listview如何匹配convertview
-            LayoutInflater.from(context).inflate(R.layout.item_order_add, null);
-            return null;
-
-        }else{
             ItemHolder holder = null;
             if (convertView == null){
                 convertView = LayoutInflater.from(context).inflate(R.layout.item_order, null);
@@ -78,7 +64,6 @@ public class OrderListAdapter extends BaseAdapter{
             //TODO set item data
 
             return convertView;
-        }
     }
 
     private class ItemHolder{

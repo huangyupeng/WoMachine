@@ -55,7 +55,6 @@
             android:layout_toLeftOf="@id/right_arrow"
             android:layout_centerVertical="true"
             android:textSize="@dimen/font_main_normal"
-            android:text="address"
             android:layout_marginLeft="@dimen/dimen_10"
             />
 
@@ -106,7 +105,6 @@
             android:layout_toLeftOf="@id/type_right_arrow"
             android:layout_centerVertical="true"
             android:textSize="@dimen/font_main_normal"
-            android:text="type"
             android:layout_marginLeft="@dimen/dimen_10"
             />
     </RelativeLayout>
@@ -120,6 +118,9 @@
         android:layout_height="wrap_content"
         android:background="@color/main_white"
         android:orientation="horizontal"
+
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         >
         <TextView
             android:layout_width="wrap_content"
@@ -134,11 +135,23 @@
 
         <EditText
             android:id="@+id/edit_square"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:padding="@dimen/dimen_10"
-            android:gravity="center"
+            android:gravity="center|left"
             android:background="@null"
+            android:hint="点击输入面积"
+            android:inputType="number"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="@dimen/dimen_15"
+            android:text="平方米"
+            android:textColor="@color/global_txt"
+
             />
     </LinearLayout>
 
@@ -188,7 +201,6 @@
             android:layout_toLeftOf="@id/machine_type_right_arrow"
             android:layout_centerVertical="true"
             android:textSize="@dimen/font_main_normal"
-            android:text="type"
             android:layout_marginLeft="@dimen/dimen_10"
             />
     </RelativeLayout>
@@ -238,7 +250,6 @@
             android:layout_toLeftOf="@id/start_time_right_arrow"
             android:layout_centerVertical="true"
             android:textSize="@dimen/font_main_normal"
-            android:text="start_date"
             android:layout_marginLeft="@dimen/dimen_10"
             />
     </RelativeLayout>
@@ -262,7 +273,7 @@
             android:layout_marginLeft="@dimen/dimen_15"
             android:textSize="@dimen/font_main_big"
             android:layout_centerVertical="true"
-            android:text="@string/farm_type"
+            android:text="@string/end_time"
             />
 
         <ImageView
@@ -285,7 +296,6 @@
             android:layout_toLeftOf="@id/end_time_right_arrow"
             android:layout_centerVertical="true"
             android:textSize="@dimen/font_main_normal"
-            android:text="end_date"
             android:layout_marginLeft="@dimen/dimen_10"
             />
     </RelativeLayout>

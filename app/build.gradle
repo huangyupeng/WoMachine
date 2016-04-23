@@ -18,6 +18,15 @@ android {
         }
     }
     useLibrary 'org.apache.http.legacy'
+
+    signingConfigs{
+        debug{
+            storeFile file("E:\\keystore\\debug.jks")
+            storePassword "123456"
+            keyAlias "peng"
+            keyPassword "123456"
+        }
+    }
 }
 
 repositories{
@@ -32,6 +41,9 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.2.1'
     compile files('libs/MobCommons-2016.0303.1229.jar')
     compile files('libs/MobTools-2016.0303.1229.jar')
-    compile name:'SMSSDK-2.0.2',ext:'aar'
-    compile name:'SMSSDKGUI-2.0.2',ext:'aar'
+    compile name: 'SMSSDK-2.0.2', ext: 'aar'
+    compile name: 'SMSSDKGUI-2.0.2', ext: 'aar'
+    compile files('libs/AMap_2DMap_V2.8.1_20160202.jar')
+    compile files('libs/AMap_3DMap_V3.3.1_20160419.jar')
+    compile files('libs/AMap_Search_V3.2.1_20160308.jar')
 }

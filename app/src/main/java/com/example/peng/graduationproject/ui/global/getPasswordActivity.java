@@ -63,6 +63,8 @@ public class getPasswordActivity extends BaseActivity implements OnClickListener
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.activity_getpassword);
 
+        getBtn_back().setVisibility(View.VISIBLE);
+
         initView();
         setDefaultValues();
         bindEvents();
@@ -166,7 +168,8 @@ public class getPasswordActivity extends BaseActivity implements OnClickListener
                                 if(httpresult.equals(""))
                                     System.out.println("反馈失败");
 
-                                getUiHanler().obtainMessage(EVENT_GETPASSWORD,httpresult);
+                                Message msg = getUiHanler().obtainMessage(EVENT_GETPASSWORD, httpresult);
+                                getUiHanler().sendMessage(msg);
 
                                 //TODO handle result
 

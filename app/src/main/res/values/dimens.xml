@@ -18,7 +18,7 @@
     <dimen name="home_tab_height">60dp</dimen>
 
     <dimen name="home_title_height">60dp</dimen>
-    <dimen name="home_title_image_a">30dp</dimen>
+    <dimen name="home_title_image_a">25dp</dimen>
     <dimen name="setting_info_height">105dp</dimen>
     <dimen name="options_item_height">50dp</dimen>   //setting
     <dimen name="option_item_padding">15dp</dimen>

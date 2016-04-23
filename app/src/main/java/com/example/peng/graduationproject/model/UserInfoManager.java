@@ -21,7 +21,6 @@ public class UserInfoManager {
         if (id == null){
             return null;
         }
-            //TODO get user info from database
         currentUser = new User();
         DatabaseHelper database = new DatabaseHelper(context);
         SQLiteDatabase db = database.getReadableDatabase();

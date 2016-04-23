@@ -142,6 +142,10 @@ public abstract class BaseActivity extends FragmentActivity{
         txt_title.setText(getResources().getString(resId));
     }
 
+    protected void setTitleText(String title){
+        txt_title.setText(title);
+    }
+
     protected void setNoTitle(boolean notitle){
         if (notitle){
             title_bar.setVisibility(View.GONE);
