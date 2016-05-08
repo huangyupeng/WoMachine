@@ -60,10 +60,7 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_personal, container, false);
 
-        //TEST NO LOGIN
 
-
-        //TEST NO LOGIN
 
         initView(view);
         setDefaultValues();
@@ -89,6 +86,14 @@ public class PersonalFragment extends BaseFragment implements View.OnClickListen
     @Override
     protected void setDefaultValues() {
         currentUser = UserInfoManager.getCurrentUser(getActivity());
+
+        //TEST NO LOGIN
+
+        currentUser = new User();
+        currentUser.setName("huanyupeng");
+        currentUser.setId("15356262439");
+
+        //TEST NO LOGIN
 
         if (currentUser == null){
             showToast("连接失败，请尝试重新登录");

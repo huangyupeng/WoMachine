@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.peng.graduationproject.R;
+import com.example.peng.graduationproject.common.Constants;
 import com.example.peng.graduationproject.model.Order;
 
 import java.util.ArrayList;
@@ -62,8 +63,18 @@ public class OrderListAdapter extends BaseAdapter{
                 holder = (ItemHolder)convertView.getTag();
             }
             //TODO set item data
+        holder.commitdate.setText(list.get(position).getCommit_date());
+        holder.farmname.setText(Constants.FARM_TYPE.get(list.get(position).getFarm_type()));
+        holder.farm_address.setText(list.get(position).getLocation());
+        holder.order_state.setText(Constants.ORDER_STATE.get(list.get(position).getState()));
+        holder.start_time.setText(list.get(position).getStart_time());
+        holder.end_time.setText(list.get(position).getEnd_time());
 
-            return convertView;
+       // if (list.get(position).getState() == 0){
+       //     holder.started.setVisibility(View.GONE);
+       // }
+
+        return convertView;
     }
 
     private class ItemHolder{

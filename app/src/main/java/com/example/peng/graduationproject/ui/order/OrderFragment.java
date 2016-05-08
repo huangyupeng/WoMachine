@@ -69,6 +69,8 @@ public class OrderFragment extends BaseFragment{
 
         datalist = new ArrayList<Order>();
 
+
+
         adapter = new OrderListAdapter(getActivity(),datalist);
         order_list.setAdapter(adapter);
 

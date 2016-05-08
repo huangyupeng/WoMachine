@@ -25,6 +25,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -154,29 +155,27 @@ public class getPasswordActivity extends BaseActivity implements OnClickListener
                     System.out.println(data);
                     if(NetManager.isConnect(getPasswordActivity.this))
                     {
-                        params=new HashMap<String, String>();
-
-                        //TODO add params
-
 
                         try {
-                            HttpResponse httpResponse = NetManager.doPost(NetManager.baseIP + NetManager.NET_INTERFACE_GETPASSWORD, params);
+                            JSONObject params = new JSONObject();
+                            params.put("mobile", get_edit.getText().toString());
+                            params.put("newPassword", new_password.getText().toString());
 
-                            if(httpResponse.getStatusLine().getStatusCode() == 200){
-                                String httpresult = EntityUtils.toString(httpResponse.getEntity());
+                            JSONObject res = NetManager.doPostJson(NetManager.NET_INTERFACE_GETPASSWORD, params);
 
-                                if(httpresult.equals(""))
-                                    System.out.println("反馈失败");
+                            if (res != null){
+                                if (res.getInt("code") != 0){
+                                    showToastOnUiThread("操作失败，错误码:" + res.getInt("code"));
+                                }else{
+                                    showToastOnUiThread("操作成功");
+                                    finish();
+                                }
 
-                                Message msg = getUiHanler().obtainMessage(EVENT_GETPASSWORD, httpresult);
-                                getUiHanler().sendMessage(msg);
-
-                                //TODO handle result
-
-
+                            }else{
+                                Log.e("myerror","http res = null");
                             }
 
-                        }catch (IOException e){
+                        }catch (Exception e){
                             e.printStackTrace();
                         }
 

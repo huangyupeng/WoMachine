@@ -61,6 +61,15 @@ public class PersonalInfoActivity extends BaseActivity implements View.OnClickLi
     protected void setDefaultValues() {
         currentUser = UserInfoManager.getCurrentUser(PersonalInfoActivity.this);
 
+        //TEST NO LOGIN
+
+        currentUser = new User();
+        currentUser.setName("huanyupeng");
+        currentUser.setId("15356262439");
+
+        //TEST NO LOGIN
+
+
         if (currentUser == null){
             showToast("连接失败，请尝试重新登录");
         }else {

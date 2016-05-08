@@ -27,7 +27,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 "password varchar(60) not null " +
                 ");";
         db.execSQL(sql);
-        sql = "create table order"
+        sql = "create table order("+
+                ""
+        ;
     }
 
     @Override

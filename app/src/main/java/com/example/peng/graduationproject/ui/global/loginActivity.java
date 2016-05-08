@@ -49,6 +49,9 @@ public class loginActivity extends BaseActivity implements OnClickListener{
     private EditText log_name;
     private EditText log_password;
 
+    private String mobile;
+    private String password;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.activity_login);
@@ -93,8 +96,8 @@ public class loginActivity extends BaseActivity implements OnClickListener{
 
         switch(v.getId()){
             case R.id.log_login:
-                String mobile = log_name.getText().toString();
-                String password = log_password.getText().toString();
+                mobile = log_name.getText().toString();
+                password = log_password.getText().toString();
                 if(mobile.equals(""))
                 {
                     showToast("手机号码不能为空");
@@ -109,33 +112,8 @@ public class loginActivity extends BaseActivity implements OnClickListener{
                 }
                 else
                 {
-                    try {
-                        JSONObject params = new JSONObject("");
-                        params.put("mobile",mobile);
-                        params.put("password",password);
-                        JSONObject res = NetManager.doPostJson(NetManager.NET_INTERFACE_LOGIN, params);
+                    getProcHandler().sendEmptyMessage(EVENT_LOGIN);
 
-                        if (res != null){
-
-                            NetManager.token = (String)res.get("data");
-                            UserInfoManager.setCurrentUser(mobile);
-
-                            Intent intent= new Intent(loginActivity.this, HomeActivity.class);
-                            startActivity(intent);
-
-                            SharedPreferences.Editor editor = mPref.edit();
-                            editor.putString("userid",mobile);
-                            editor.putString("password",password);
-                            editor.commit();
-                            finish();
-
-                        }else{
-                            Log.e("myerror","httpres = null");
-                        }
-
-                    }catch(Exception e){
-                        e.printStackTrace();
-                    }
                 }
                 break;
             case R.id.log_register:
@@ -147,5 +125,49 @@ public class loginActivity extends BaseActivity implements OnClickListener{
                 startActivity(i);
                 break;
         }
+    }
+
+    @Override
+    protected boolean procHandlerCallBack(Message msg) {
+
+        switch (msg.what){
+            case EVENT_LOGIN:
+                try {
+                    JSONObject params = new JSONObject();
+                    params.put("mobile",mobile);
+                    params.put("loginPassword",password);
+                    JSONObject res = NetManager.doPostJson(NetManager.NET_INTERFACE_LOGIN, params);
+
+                    if (res != null){
+
+                        if (res.getInt("code") != 0){
+                            showToastOnUiThread("登录失败，错误码:" + res.getInt("code"));
+                        }else{
+                            showToastOnUiThread("登录成功");
+                            NetManager.token = ((JSONObject)res.get("data")).getString("token");
+                            UserInfoManager.setCurrentUser(mobile);
+
+                            Intent intent= new Intent(loginActivity.this, HomeActivity.class);
+                            startActivity(intent);
+
+                            SharedPreferences.Editor editor = mPref.edit();
+                            editor.putString("userid",mobile);
+                            editor.putString("password",password);
+                            editor.commit();
+                            finish();
+                        }
+
+                    }else{
+                        Log.e("myerror","httpres = null");
+                    }
+
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+                break;
+
+        }
+
+        return super.procHandlerCallBack(msg);
     }
 }

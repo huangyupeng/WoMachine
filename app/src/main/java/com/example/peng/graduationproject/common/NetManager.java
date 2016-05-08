@@ -36,9 +36,9 @@ import java.util.Set;
 public class NetManager {
     private static volatile HttpClient httpclient;
 
-    public final static String baseIP = "nj.wentong.me:8080";
+    public final static String baseIP = "http://192.168.199.193:8080";
 
-    public final static String NET_INTERFACE_LOGIN = "";
+    public final static String NET_INTERFACE_LOGIN = baseIP + "/user/login";
 
     public final static String NET_INTERFACE_GETPASSWORD = "";
 
@@ -88,6 +88,9 @@ public class NetManager {
             }
             try {
                 response = new JSONObject(result);
+                if (response.getInt("code") != 0){
+                    Log.e("myerror","code = "+ response.getInt("code"));
+                }
             }catch(JSONException e){
                 e.printStackTrace();
                 Log.e("myerror","JSONException");
